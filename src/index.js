@@ -18,12 +18,12 @@ document.querySelector(
 ).style.backgroundImage = `url(${avatar})`;
 
 const cardContainer = document.querySelector(".places__list");
-const imageContainer = document.querySelector(".popup__image");
-const textContainer = document.querySelector(".popup__caption");
-const imagePopup = document.querySelector(".popup_type_image");
 const editBtn = document.querySelector(".profile__edit-button");
 const addBtn = document.querySelector(".profile__add-button");
 const closeBtns = document.querySelectorAll(".popup__close");
+const imagePopup = document.querySelector(".popup_type_image");
+const imageContainer = imagePopup.querySelector(".popup__image");
+const textContainer = imagePopup.querySelector(".popup__caption");
 
 initialCards.forEach(addCard);
 
@@ -36,14 +36,14 @@ function addCard(item, isNew) {
   }
 }
 
-function openImage(event, name, link) {
-  if (!event.target.classList.contains("card__delete-button")) {
-    textContainer.textContent = name;
-    imageContainer.src = link;
-    imageContainer.alt = name;
-
-    openPopup(imagePopup);
-  }
+function openImage(evt) {
+  const card = evt.target.closest(".card"),
+    cardImage = card.querySelector(".card__image"),
+    cardTitle = card.querySelector(".card__title");
+    imageContainer.src = cardImage.src;
+    imageContainer.alt = cardImage.alt;
+    textContainer.textContent = cardTitle.textContent;
+  openPopup(imagePopup);
 }
 
 addBtn.addEventListener("click", () => {

@@ -10,10 +10,12 @@ const nameEdit = formEdit.elements.name;
 const description = formEdit.elements.description;
 const nameAdd = formAdd.elements["place-name"];
 const linkAdd = formAdd.elements.link;
+
 function loadCurrentProfileInfo() {
   nameEdit.value = nameInput.textContent;
   description.value = descriptionInput.textContent;
 }
+
 function handleAddCard(event) {
   event.preventDefault();
   const name = nameAdd.value;
