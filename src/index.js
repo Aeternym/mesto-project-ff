@@ -72,4 +72,3 @@ function closeByClick(event) {
 formEdit.addEventListener("submit", handleEditFormSubmit);
 formAdd.addEventListener("submit", handleAddCard);
 
-export { addCard };

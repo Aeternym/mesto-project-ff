@@ -1,5 +1,7 @@
 import { closePopup } from "./modal.js";
-import { addCard } from "../index.js";
+
+
+
 const formEdit = document.forms["edit-profile"];
 const formAdd = document.forms["new-place"];
 const newCardPopup = document.querySelector(".popup_type_new-card");
@@ -10,11 +12,14 @@ const nameEdit = formEdit.elements.name;
 const description = formEdit.elements.description;
 const nameAdd = formAdd.elements["place-name"];
 const linkAdd = formAdd.elements.link;
+const cardContainer = document.querySelector(".places__list");
 
 function loadCurrentProfileInfo() {
   nameEdit.value = nameInput.textContent;
   description.value = descriptionInput.textContent;
 }
+
+import { deleteCard, likeCard, createCard } from "./card.js";
 
 function handleAddCard(event) {
   event.preventDefault();
@@ -23,6 +28,15 @@ function handleAddCard(event) {
   const newCard = { name, link };
   addCard(newCard, true);
   resetFormAndClosePopup(formAdd, newCardPopup);
+}
+
+function addCard(item, isNew) {
+  const card = createCard(item, deleteCard, likeCard);
+  if (isNew) {
+    cardContainer.prepend(card);
+  } else {
+    cardContainer.append(card);
+  }
 }
 
 function handleEditFormSubmit(event) {
