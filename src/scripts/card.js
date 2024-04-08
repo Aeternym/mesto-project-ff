@@ -8,19 +8,26 @@ function createCard(item, deleteCard, likeCard, openImage) {
   image.src = item.link;
   image.alt = item.name;
   title.textContent = item.name;
-  deleteBtn.addEventListener("click", deleteCard);
-  likeBtn.addEventListener("click", likeCard);
-  image.addEventListener("click", (event) => {
-    openImage(event, item.name, item.link);
+  deleteBtn.addEventListener("click", (evt) => {
+    deleteCard(evt);
+  });
+  likeBtn.addEventListener("click", (evt) => {
+    likeCard(evt);
+  });
+  image.addEventListener("click", () => {
+    openImage(image.src, image.alt, title.textContent);
   });
   return cardElement;
 }
-function deleteCard(event) {
-  const item = event.target.closest(".card");
-  item.remove();
-}
-function likeCard(event) {
-  const likeBtn = event.target.closest(".card__like-button");
-  likeBtn.classList.toggle("card__like-button_is-active");
-}
-export { deleteCard, likeCard, createCard };
+
+const uploadCard = (item, container, likeCard, deleteCard, openImage, place = "end",
+) => {
+  const cardElement = createCard(item, deleteCard, likeCard, openImage);
+  if (place === "end") {
+    container.append(cardElement);
+  } else {
+    container.prepend(cardElement);
+  }
+};
+
+export { uploadCard };
