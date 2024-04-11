@@ -1,6 +1,6 @@
 import "./index.css";
 import { initialCards } from "./scripts/cards.js";
-import { uploadCard } from "./scripts/card";
+import { deleteCard, likeCard, createCard } from "./scripts/card";
 import { openPopup, closePopup, closeByOverlay } from "./scripts/modal.js";
 
 const popupProfileForm = document.forms["edit-profile"];
@@ -17,18 +17,20 @@ const popupImage = popupImageElement.querySelector(".popup__image");
 const popupCaption = popupImageElement.querySelector(".popup__caption");
 const nameInput = document.querySelector(".profile__title");
 const descriptionInput = document.querySelector(".profile__description");
+const closeBtns = document.querySelectorAll(".popup__close");
 const avatar = new URL('./images/avatar.jpg', import.meta.url);
 document.querySelector(
   ".profile__image"
 ).style.backgroundImage = `url(${avatar})`;
 
-const likeCard = (event) => {
-  event.target.classList.toggle("card__like-button_is-active");
-};
-
-const deleteCard = (event) => {
-  const parent = event.target.closest(".card");
-  parent.remove();
+const uploadCard = (item, container, likeCard, deleteCard, openImage, place = "end",
+) => {
+  const cardElement = createCard(item, deleteCard, likeCard, openImage);
+  if (place === "end") {
+    container.append(cardElement);
+  } else {
+    container.prepend(cardElement);
+  }
 };
 
 const openImagePopup = (imageURL, imageAlt, title) => {
@@ -73,11 +75,21 @@ popupNewCard.addEventListener("click", (event) => {
   closeByOverlay(event);
 });
 
-document.addEventListener("click", (event) => {
-  if (event.target.classList.contains("popup__close")) {
-    closePopup(event.target.parentNode.parentNode);
-  }
-});
+closeBtns.forEach((button) => { 
+  button.addEventListener("click", handleClose); 
+}); 
+document.addEventListener("click", closeByClick); 
+function handleClose(event) { 
+  const popup = event.target.closest(".popup"); 
+  closePopup(popup); 
+} 
+function closeByClick(event) { 
+  const popup = event.target.closest(".popup"); 
+  event.stopPropagation(); 
+  if (event.target.classList.contains("popup")) { 
+    closePopup(popup); 
+  } 
+} 
 
 profileEditButton.addEventListener("click", () => {
   loadCurrentProfileInfo(

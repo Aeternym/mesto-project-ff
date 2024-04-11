@@ -20,14 +20,13 @@ function createCard(item, deleteCard, likeCard, openImage) {
   return cardElement;
 }
 
-const uploadCard = (item, container, likeCard, deleteCard, openImage, place = "end",
-) => {
-  const cardElement = createCard(item, deleteCard, likeCard, openImage);
-  if (place === "end") {
-    container.append(cardElement);
-  } else {
-    container.prepend(cardElement);
-  }
+const likeCard = (event) => {
+  event.target.classList.toggle("card__like-button_is-active");
 };
 
-export { uploadCard };
+const deleteCard = (event) => {
+  const parent = event.target.closest(".card");
+  parent.remove();
+};
+
+export { deleteCard, likeCard, createCard};
