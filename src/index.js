@@ -78,18 +78,12 @@ popupNewCard.addEventListener("click", (event) => {
 closeBtns.forEach((button) => { 
   button.addEventListener("click", handleClose); 
 }); 
-document.addEventListener("click", closeByClick); 
+ 
 function handleClose(event) { 
   const popup = event.target.closest(".popup"); 
   closePopup(popup); 
 } 
-function closeByClick(event) { 
-  const popup = event.target.closest(".popup"); 
-  event.stopPropagation(); 
-  if (event.target.classList.contains("popup")) { 
-    closePopup(popup); 
-  } 
-} 
+
 
 profileEditButton.addEventListener("click", () => {
   loadCurrentProfileInfo(
