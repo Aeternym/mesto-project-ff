@@ -39,22 +39,16 @@ const cardLink = popupNewCardForm.elements.link;
 const nameInput = popupProfileForm.elements.name;
 const descrInput = popupProfileForm.elements.description;
 
+let globalId;
+
 Promise.all([getUserInfo(), getCards()])
   .then(([userData, cardData]) => {
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;
     profileImage.style.backgroundImage = `url(${userData.avatar})`;
-    globalId = userData._id;
     cardData.forEach((item) => {
       const card = createCard(item, deleteCardPopup, likeCards, openImageCard, item.likes.length, item.owner._id, item._id, globalId);
-      item.likes.forEach((like) => {
-        if (like._id === globalId) {
-          const liked = card.querySelector('.card__like-button');
-          liked.classList.add('card__like-button_is-active');
-        }
-      });
       placesList.append(card);
-
     });
   })
   .catch((err) => {
@@ -75,7 +69,7 @@ newCardButton.addEventListener("click", () => {
   openPopup(popupNewCard);
 });
 
-function handleFormSubmit(evt) {
+function handleFormSubmitProfile(evt) {
   evt.preventDefault();
   buttonLoading.textContent = 'Сохранение...';
   postUserProfile(nameInput.value, descrInput.value)
@@ -92,7 +86,7 @@ function handleFormSubmit(evt) {
     });
 
 }
-popupProfileForm.addEventListener('submit', handleFormSubmit);
+popupProfileForm.addEventListener('submit', handleFormSubmitProfile);
 
 function handleFormSubmitCard(evt) {
   evt.preventDefault();
@@ -123,21 +117,17 @@ function openImageCard(name, link) {
   openPopup(popupImageElement);
 }
 
-
-function deleteCardPopup(cardId, card) {
-  openPopup(popupCardDelete);
-  popupButtonDelete.addEventListener('click', () => {
-    deleteCardByApi(cardId)
-      .then((result) => {
-        console.log(result);
-        card.remove();
-        closePopup(popupCardDelete);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-}
+const deleteCardPopup = async (evt) => {
+  deleteCardByApi(cardId)
+    .then((result) => {
+      console.log(result);
+      card.remove();
+      closeModal(popupConfirm);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 function likeCards(cardId, card, liked) {
   if (liked.classList.contains('card__like-button_is-active')) {
