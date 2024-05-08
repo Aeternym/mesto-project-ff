@@ -18,12 +18,6 @@ function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId
   const liked = cardElement.querySelector('.card__like-button');
   liked.addEventListener('click', () => likeCard(cardId, cardElement, liked));
   image.addEventListener('click', () => openImage(image.src, image.alt, title.textContent));
-  item.likes.forEach((like) => {
-    if (like._id === globalId) {
-      const liked = card.querySelector('.card__like-button');
-      liked.classList.add('card__like-button_is-active');
-    }
-  });
   return cardElement;
 }
 

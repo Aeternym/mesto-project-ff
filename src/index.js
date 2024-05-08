@@ -55,12 +55,12 @@ Promise.all([getUserInfo(), getCards()])
     console.log(err);
   });
 
-  profileEditButton.addEventListener('click', () => {
-    nameInput.value = profileTitle.textContent;
-    descrInput.value = profileDescription.textContent;
-    clearValidation(popupProfile, configValidation);
-    openPopup(popupProfile);
-  });
+profileEditButton.addEventListener('click', () => {
+  nameInput.value = profileTitle.textContent;
+  descrInput.value = profileDescription.textContent;
+  clearValidation(popupProfile, configValidation);
+  openPopup(popupProfile);
+});
 
 newCardButton.addEventListener("click", () => {
   cardName.value = '';
@@ -117,7 +117,7 @@ function openImageCard(name, link) {
   openPopup(popupImageElement);
 }
 
-const deleteCardPopup = async (evt) => {
+const deleteCardPopup = (evt) => {
   deleteCardByApi(cardId)
     .then((result) => {
       console.log(result);
@@ -133,7 +133,7 @@ function likeCards(cardId, card, liked) {
   if (liked.classList.contains('card__like-button_is-active')) {
     liked.classList.remove('card__like-button_is-active');
     deleteLike(cardId)
-    .then((result) => {
+      .then((result) => {
         card.querySelector('.card_like-count').textContent = result.likes.length;
       })
       .catch((err) => {
@@ -143,14 +143,14 @@ function likeCards(cardId, card, liked) {
   } else {
     liked.classList.add('card__like-button_is-active');
     putLike(cardId)
-    .then((result) => {
+      .then((result) => {
         card.querySelector('.card_like-count').textContent = result.likes.length;
       })
       .catch((err) => {
         liked.classList.remove('card__like-button_is-active');
         console.log(err);
       });
-  }
+  };
 }
 
 profileImage.addEventListener('click', () => {
@@ -165,16 +165,16 @@ function handleFormSubmitAvatar(evt) {
   evt.preventDefault();
   buttonLoading.textContent = 'Сохранение...';
   updateAvatar(avatarInput.value)
-  .then((result) => {
-    profileImage.style.backgroundImage = `url(${result.avatar})`;
-    closePopup(popupAvatar)
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-  .finally(() => {
-    buttonLoading.textContent = 'Сохранить';
-  });
+    .then((result) => {
+      profileImage.style.backgroundImage = `url(${result.avatar})`;
+      closePopup(popupAvatar)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      buttonLoading.textContent = 'Сохранить';
+    });
 }
 
 popupImageElement.addEventListener("click", (event) => {
@@ -185,13 +185,13 @@ popupNewCard.addEventListener("click", (event) => {
   closeByOverlay(event);
 });
 
-closeBtns.forEach((button) => { 
-  button.addEventListener("click", handleClose); 
-}); 
- 
-function handleClose(event) { 
-  const popup = event.target.closest(".popup"); 
-  closePopup(popup); 
+closeBtns.forEach((button) => {
+  button.addEventListener("click", handleClose);
+});
+
+function handleClose(event) {
+  const popup = event.target.closest(".popup");
+  closePopup(popup);
 }
 
 popupAvatarForm.addEventListener('submit', handleFormSubmitAvatar)
