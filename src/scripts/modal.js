@@ -15,10 +15,14 @@ function closeByEsc(event) {
   }
 }
 
-function closeByOverlay(event) {
-  if (event.target === event.currentTarget) {
-    closePopup(event.currentTarget);
+function closeByOverlay(event){
+  if (event.target.classList.contains('popup_is-opened')) {
+    return closePopup(event.target);
   }
-}
+
+  if (event.target.closest('.popup__close')) {
+    return closePopup(event.target.closest('.popup'));
+  }
+};
 
 export { closePopup, openPopup, closeByOverlay };

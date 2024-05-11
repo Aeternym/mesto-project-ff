@@ -1,3 +1,4 @@
+import {putLike, deleteLike} from './api';
 const template = document.querySelector("#card-template").content;
 
 function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId, globalId) {
@@ -21,4 +22,28 @@ function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId
   return cardElement;
 }
 
-export {createCard};
+function likeCards(cardId, card, liked) {
+  if (liked.classList.contains('card__like-button_is-active')) {
+    liked.classList.remove('card__like-button_is-active');
+    deleteLike(cardId)
+      .then((result) => {
+        card.querySelector('.card_like-count').textContent = result.likes.length;
+      })
+      .catch((err) => {
+        liked.classList.add('card__like-button_is-active');
+        console.log(err);
+      });
+  } else {
+    liked.classList.add('card__like-button_is-active');
+    putLike(cardId)
+      .then((result) => {
+        card.querySelector('.card_like-count').textContent = result.likes.length;
+      })
+      .catch((err) => {
+        liked.classList.remove('card__like-button_is-active');
+        console.log(err);
+      });
+  };
+}
+
+export {createCard, likeCards};

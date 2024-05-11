@@ -1,5 +1,5 @@
 import "./index.css";
-import { createCard } from "./scripts/card";
+import { createCard, likeCards } from "./scripts/card";
 import { openPopup, closePopup, closeByOverlay } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from './scripts/validation.js';
 import { getUserInfo, getCards, postUserProfile, postNewCard, putLike, deleteLike, deleteCardByApi, updateAvatar } from './scripts/api.js';
@@ -117,40 +117,20 @@ function openImageCard(name, link) {
   openPopup(popupImageElement);
 }
 
-const deleteCardPopup = (evt) => {
-  deleteCardByApi(cardId)
-    .then((result) => {
-      console.log(result);
-      card.remove();
-      closeModal(popupConfirm);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
 
-function likeCards(cardId, card, liked) {
-  if (liked.classList.contains('card__like-button_is-active')) {
-    liked.classList.remove('card__like-button_is-active');
-    deleteLike(cardId)
+function deleteCardPopup(cardId, card) {
+  openModal(popupCardDelete);
+  popupButtonDelete.addEventListener('click', () => {
+    deleteCardByApi(cardId)
       .then((result) => {
-        card.querySelector('.card_like-count').textContent = result.likes.length;
+        console.log(result);
+        card.remove();
+        closeModal(popupCardDelete);
       })
       .catch((err) => {
-        liked.classList.add('card__like-button_is-active');
         console.log(err);
       });
-  } else {
-    liked.classList.add('card__like-button_is-active');
-    putLike(cardId)
-      .then((result) => {
-        card.querySelector('.card_like-count').textContent = result.likes.length;
-      })
-      .catch((err) => {
-        liked.classList.remove('card__like-button_is-active');
-        console.log(err);
-      });
-  };
+  });
 }
 
 profileImage.addEventListener('click', () => {
