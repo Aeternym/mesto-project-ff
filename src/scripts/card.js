@@ -1,10 +1,11 @@
 import {putLike, deleteLike} from './api';
+import {openPopup} from './modal';
 const template = document.querySelector("#card-template").content;
 
 function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId, globalId) {
   const cardElement = template.querySelector('.card').cloneNode(true);
   const deleteBtn = cardElement.querySelector('.card__delete-button');
-  if (userId !== globalId) {
+  if (globalId !== globalId) {
     deleteBtn.classList.add('card__delete-button-disabled');
     deleteBtn.disabled = true;
   } 
@@ -19,6 +20,8 @@ function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId
   const liked = cardElement.querySelector('.card__like-button');
   liked.addEventListener('click', () => likeCard(cardId, cardElement, liked));
   image.addEventListener('click', () => openImage(image.src, image.alt, title.textContent));
+
+  
   return cardElement;
 }
 
@@ -46,4 +49,10 @@ function likeCards(cardId, card, liked) {
   };
 }
 
-export {createCard, likeCards};
+
+const deleteCard = (evt, cardId) => {
+  openPopup(popupConfirm);
+  popupConfirm.dataset.cardId = cardId;
+};
+
+export {createCard, likeCards, deleteCard};

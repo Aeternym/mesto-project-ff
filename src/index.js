@@ -1,8 +1,8 @@
 import "./index.css";
-import { createCard, likeCards } from "./scripts/card";
+import { createCard, likeCards} from "./scripts/card";
 import { openPopup, closePopup, closeByOverlay } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from './scripts/validation.js';
-import { getUserInfo, getCards, postUserProfile, postNewCard, putLike, deleteLike, deleteCardByApi, updateAvatar } from './scripts/api.js';
+import { getUserInfo, getCards, postUserProfile, postNewCard, deleteCardByApi, updateAvatar } from './scripts/api.js';
 
 const configValidation = {
   formSelector: '.popup__form',
@@ -119,19 +119,21 @@ function openImageCard(name, link) {
 
 
 function deleteCardPopup(cardId, card) {
-  openModal(popupCardDelete);
-  popupButtonDelete.addEventListener('click', () => {
+  openPopup(popupCardDelete);
+  popupButtonDelete.onclick = () => {
     deleteCardByApi(cardId)
       .then((result) => {
         console.log(result);
         card.remove();
-        closeModal(popupCardDelete);
+        closePopup(popupCardDelete);
       })
       .catch((err) => {
         console.log(err);
       });
-  });
+  };
 }
+
+
 
 profileImage.addEventListener('click', () => {
   openPopup(popupAvatar);
@@ -147,7 +149,7 @@ function handleFormSubmitAvatar(evt) {
   updateAvatar(avatarInput.value)
     .then((result) => {
       profileImage.style.backgroundImage = `url(${result.avatar})`;
-      closePopup(popupAvatar)
+      closeByOverlay(popupAvatar)
     })
     .catch((err) => {
       console.log(err);
@@ -158,6 +160,10 @@ function handleFormSubmitAvatar(evt) {
 }
 
 popupImageElement.addEventListener("click", (event) => {
+  closeByOverlay(event);
+});
+
+popupAvatar.addEventListener("click", (event) => {
   closeByOverlay(event);
 });
 
