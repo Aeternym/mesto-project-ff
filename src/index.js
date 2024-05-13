@@ -1,5 +1,5 @@
 import "./index.css";
-import { createCard, likeCards} from "./scripts/card";
+import { createCard, likeCards, deleteCard} from "./scripts/card";
 import { openPopup, closePopup, closeByOverlay } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from './scripts/validation.js';
 import { getUserInfo, getCards, postUserProfile, postNewCard, deleteCardByApi, updateAvatar } from './scripts/api.js';
@@ -134,7 +134,6 @@ function deleteCardPopup(cardId, card) {
 }
 
 
-
 profileImage.addEventListener('click', () => {
   openPopup(popupAvatar);
   avatarInput.value = '';
@@ -168,6 +167,10 @@ popupAvatar.addEventListener("click", (event) => {
 });
 
 popupNewCard.addEventListener("click", (event) => {
+  closeByOverlay(event);
+});
+
+popupProfile.addEventListener("click", (event) => {
   closeByOverlay(event);
 });
 
