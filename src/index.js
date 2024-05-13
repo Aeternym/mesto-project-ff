@@ -2,7 +2,7 @@ import "./index.css";
 import { createCard, likeCards, deleteCard} from "./scripts/card";
 import { openPopup, closePopup, closeByOverlay } from "./scripts/modal.js";
 import { enableValidation, clearValidation } from './scripts/validation.js';
-import { getUserInfo, getCards, postUserProfile, postNewCard, deleteCardByApi, updateAvatar } from './scripts/api.js';
+import { getUserInfo, getCards, postUserProfile, postNewCard, updateAvatar } from './scripts/api.js';
 
 const configValidation = {
   formSelector: '.popup__form',
@@ -29,8 +29,6 @@ const closeBtns = document.querySelectorAll(".popup__close");
 const popupImageElement = document.querySelector(".popup_type_image");
 const popupImage = popupImageElement.querySelector(".popup__image");
 const popupCaption = popupImageElement.querySelector(".popup__caption");
-const popupCardDelete = document.querySelector('.popup_card_delete');
-const popupButtonDelete = document.querySelector('.popup__button-delete');
 const popupAvatar = document.querySelector('.popup_card_update-avatar');
 const popupAvatarForm = document.forms['update-avatar'];
 const avatarInput = popupAvatarForm.elements.avatar;
@@ -47,7 +45,7 @@ Promise.all([getUserInfo(), getCards()])
     profileDescription.textContent = userData.about;
     profileImage.style.backgroundImage = `url(${userData.avatar})`;
     cardData.forEach((item) => {
-      const card = createCard(item, deleteCardPopup, likeCards, openImageCard, item.likes.length, item.owner._id, item._id, globalId);
+      const card = createCard(item, deleteCard, likeCards, openImageCard, item.likes.length, item.owner._id, item._id, globalId);
       placesList.append(card);
     });
   })
@@ -95,7 +93,7 @@ function handleFormSubmitCard(evt) {
     .then((result) => {
       const placeInput = result.name;
       const linkInput = result.link;
-      const card = createCard({ name: placeInput, link: linkInput }, deleteCardPopup, likeCards, openImageCard, result.likes.length, result.owner._id, result._id, globalId);
+      const card = createCard({ name: placeInput, link: linkInput }, deleteCard, likeCards, openImageCard, result.likes.length, result.owner._id, result._id, globalId);
       placesList.prepend(card);
       popupNewCardForm.reset();
       closePopup(popupNewCard);
@@ -118,21 +116,6 @@ function openImageCard(name, link) {
 }
 
 
-function deleteCardPopup(cardId, card) {
-  openPopup(popupCardDelete);
-  popupButtonDelete.onclick = () => {
-    deleteCardByApi(cardId)
-      .then((result) => {
-        console.log(result);
-        card.remove();
-        closePopup(popupCardDelete);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-}
-
 
 profileImage.addEventListener('click', () => {
   openPopup(popupAvatar);
@@ -148,7 +131,7 @@ function handleFormSubmitAvatar(evt) {
   updateAvatar(avatarInput.value)
     .then((result) => {
       profileImage.style.backgroundImage = `url(${result.avatar})`;
-      closeByOverlay(popupAvatar)
+      closePopup(popupAvatar)
     })
     .catch((err) => {
       console.log(err);

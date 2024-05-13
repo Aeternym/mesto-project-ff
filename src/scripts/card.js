@@ -1,6 +1,7 @@
-import {putLike, deleteLike} from './api';
-import {openPopup} from './modal';
+import {putLike, deleteLike, deleteCardByApi} from './api';
 const template = document.querySelector("#card-template").content;
+const cardElement = template.querySelector('.card');
+const deleteBtn = cardElement.querySelector('.card__delete-button');
 
 function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId, globalId) {
   const cardElement = template.querySelector('.card').cloneNode(true);
@@ -53,9 +54,17 @@ function likeCards(cardId, card, liked) {
 }
 
 
-const deleteCard = (evt, cardId) => {
-  openPopup(popupConfirm);
-  popupConfirm.dataset.cardId = cardId;
-};
+function deleteCard(cardId, card) {
+  deleteBtn.onclick = () => {
+    deleteCardByApi(cardId)
+      .then((result) => {
+        console.log(result);
+        card.remove();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
 
 export {createCard, likeCards, deleteCard};
