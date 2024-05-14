@@ -39,11 +39,13 @@ const descrInput = popupProfileForm.elements.description;
 
 let globalId;
 
+
 Promise.all([getUserInfo(), getCards()])
   .then(([userData, cardData]) => {
     profileTitle.textContent = userData.name;
     profileDescription.textContent = userData.about;
     profileImage.style.backgroundImage = `url(${userData.avatar})`;
+    globalId = userData._id;
     cardData.forEach((item) => {
       const card = createCard(item, deleteCard, likeCards, openImageCard, item.likes.length, item.owner._id, item._id, globalId);
       placesList.append(card);

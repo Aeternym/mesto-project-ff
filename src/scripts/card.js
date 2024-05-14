@@ -1,15 +1,14 @@
 import {putLike, deleteLike, deleteCardByApi} from './api';
 const template = document.querySelector("#card-template").content;
-const cardElement = template.querySelector('.card');
-const deleteBtn = cardElement.querySelector('.card__delete-button');
 
-function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId, globalId) {
+function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId, globalUserId) {
   const cardElement = template.querySelector('.card').cloneNode(true);
   const deleteBtn = cardElement.querySelector('.card__delete-button');
-  if (userId !== globalId) {
+  if (userId !== globalUserId) {
     deleteBtn.classList.add('card__delete-button-disabled');
     deleteBtn.disabled = true;
-  } 
+  }
+
   const title = cardElement.querySelector(".card__title");
   title.textContent = item.name;
   const likeCount = cardElement.querySelector('.card_like-count');
@@ -22,6 +21,12 @@ function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId
   liked.addEventListener('click', () => likeCard(cardId, cardElement, liked));
   image.addEventListener('click', () => openImage(image.src, image.alt, title.textContent));
 
+  //likeCount.textContent = cardLike.length;
+  //cardLike.forEach((element) => {
+  //  if (element._id === userId) {
+  //    liked.classList.add("card__like-button_is-active");
+  //  }
+  //});
 
   return cardElement;
 }
@@ -55,7 +60,6 @@ function likeCards(cardId, card, liked) {
 
 
 function deleteCard(cardId, card) {
-  deleteBtn.onclick = () => {
     deleteCardByApi(cardId)
       .then((result) => {
         console.log(result);
@@ -64,7 +68,6 @@ function deleteCard(cardId, card) {
       .catch((err) => {
         console.log(err);
       });
-  };
 }
 
 export {createCard, likeCards, deleteCard};
