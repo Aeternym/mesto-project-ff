@@ -21,12 +21,7 @@ function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId
   liked.addEventListener('click', () => likeCard(cardId, cardElement, liked));
   image.addEventListener('click', () => openImage(image.src, image.alt, title.textContent));
 
-  //likeCount.textContent = cardLike.length;
-  //cardLike.forEach((element) => {
-  //  if (element._id === userId) {
-  //    liked.classList.add("card__like-button_is-active");
-  //  }
-  //});
+  
 
   return cardElement;
 }

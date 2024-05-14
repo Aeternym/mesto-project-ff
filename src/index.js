@@ -48,6 +48,12 @@ Promise.all([getUserInfo(), getCards()])
     globalId = userData._id;
     cardData.forEach((item) => {
       const card = createCard(item, deleteCard, likeCards, openImageCard, item.likes.length, item.owner._id, item._id, globalId);
+      item.likes.forEach((like) => { 
+        if (like._id === globalId) { 
+          const liked = card.querySelector('.card__like-button'); 
+          liked.classList.add('card__like-button_is-active'); 
+        } 
+      }); 
       placesList.append(card);
     });
   })
