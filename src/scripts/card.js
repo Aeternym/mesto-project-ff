@@ -1,5 +1,7 @@
-import {putLike, deleteLike, deleteCardByApi} from './api';
+import { putLike, deleteLike, deleteCardByApi } from './api';
 const template = document.querySelector("#card-template").content;
+
+
 
 function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId, globalUserId) {
   const cardElement = template.querySelector('.card').cloneNode(true);
@@ -20,8 +22,11 @@ function createCard(item, deleteCard, likeCard, openImage, likes, userId, cardId
   const liked = cardElement.querySelector('.card__like-button');
   liked.addEventListener('click', () => likeCard(cardId, cardElement, liked));
   image.addEventListener('click', () => openImage(image.src, image.alt, title.textContent));
-
   
+
+  if (item.likes.some((like) => like._id === userId)) {
+    liked.classList.add("card__like-button_is-active");
+  }
 
   return cardElement;
 }
@@ -55,14 +60,18 @@ function likeCards(cardId, card, liked) {
 
 
 function deleteCard(cardId, card) {
-    deleteCardByApi(cardId)
-      .then((result) => {
-        console.log(result);
-        card.remove();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  deleteCardByApi(cardId)
+    .then((result) => {
+      console.log(result);
+      card.remove();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
-export {createCard, likeCards, deleteCard};
+
+
+
+
+export { createCard, likeCards, deleteCard };
